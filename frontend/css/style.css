@@ -1,3 +1,7 @@
+/* =========================
+   Base & Reset
+========================= */
+
 * {
   box-sizing: border-box;
 }
@@ -9,83 +13,297 @@ body {
   color: #222;
 }
 
+/* =========================
+   Layout
+========================= */
+
 .container {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: auto;
-  padding: 40px 20px;
+  padding: 40px 24px;
 }
 
-nav {
-  background: white;
-  padding: 14px 30px;
-  display: flex;
-  justify-content: space-between;
-  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+
+section {
+  margin-bottom: 40px;
 }
 
-nav a {
-  margin-left: 16px;
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-}
+/* =========================
+   Typography
+========================= */
 
-h1, h2 {
+h1,
+h2 {
   margin-bottom: 20px;
 }
 
-input, select {
-  padding: 10px;
-  margin-bottom: 12px;
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* =========================
+   Forms
+========================= */
+
+input,
+select,
+textarea {
   width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
   border: 1px solid #ddd;
   border-radius: 6px;
+  font-size: 14px;
+}
+
+textarea {
+  resize: none;
+  line-height: 1.4;
 }
 
 button {
   padding: 10px 18px;
   border: none;
-  background: #222;
-  color: white;
   border-radius: 6px;
+  background: #222;
+  color: #fff;
   cursor: pointer;
+  font-size: 14px;
 }
 
 button:hover {
-  opacity: .85;
+  opacity: 0.85;
 }
+
+button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* =========================
+   Grid & Cards
+========================= */
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
+  grid-auto-flow: dense;
 }
 
+
 .card {
-  background: white;
+  background: #fff;
   padding: 14px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .card img {
   width: 100%;
+  height: 338px;
+  /* ВАЖНО */
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
+.card.horizontal {
+  grid-column: span 2;
+}
+
+
+.card img {
+  transition: transform 0.3s ease;
+}
+
+.card:hover img {
+  transform: scale(1.03);
+}
+
+/* =========================
+   Stats (используются в stats.html)
+========================= */
+
 .stat-box {
-  background:white;
-  padding:20px;
-  border-radius:10px;
-  text-align:center;
-  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stat-box img {
+  max-width: 300px;
 }
 
 .stat {
-    min-width: fit-content;
+  min-width: fit-content;
 }
 
-.stat-box img{
-    max-width: 300px;
+#categories .card,
+#monthly .card {
+  margin-bottom: 10px;
+}
+
+/* =========================
+   Upload Page
+========================= */
+
+.upload-container {
+  max-width: 600px;
+}
+
+.upload-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
+}
+
+/* =========================
+   Base Navigation
+========================= */
+
+nav {
+  background: #fff;
+  padding: 14px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Links inside nav */
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+nav a:hover {
+  color: #000;
+}
+
+/* =========================
+   Enhanced Navbar (modern)
+========================= */
+
+.navbar {
+  height: 64px;
+  padding: 0 40px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Logo / title */
+.nav-left {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Center links */
+.nav-center {
+  display: flex;
+  gap: 28px;
+}
+
+.nav-center a {
+  margin-left: 0;
+  /* перекрываем nav a */
+}
+
+/* User info */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+}
+
+.nav-right span {
+  color: #555;
+}
+
+.nav-right strong {
+  color: #000;
+}
+
+.nav-right button {
+  background: #f2f2f2;
+  color: #000;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.nav-right button:hover {
+  background: #e6e6e6;
+}
+
+#nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== Fullscreen photo modal ===== */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal img {
+  max-width: 95%;
+  max-height: 95%;
+  object-fit: contain;
+}
+
+.modal .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 32px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
 }

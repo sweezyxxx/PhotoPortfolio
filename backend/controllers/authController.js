@@ -2,34 +2,87 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+/* =======================
+   REGISTER
+======================= */
 exports.register = async (req, res) => {
-  const { username, email, password } = req.body;
+  try {
+    const { username, email, password } = req.body;
 
-  const hashed = await bcrypt.hash(password, 10);
+    const exists = await User.findOne({ email });
+    if (exists) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists"
+      });
+    }
 
-  const user = await User.create({
-    username,
-    email,
-    password: hashed
-  });
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  res.status(201).json({ message: "User created" });
+    const user = await User.create({
+      username,
+      email,
+      password: hashedPassword
+    });
+
+    res.status(201).json({
+      success: true,
+      data: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
 };
 
+/* =======================
+   LOGIN
+======================= */
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { login, password } = req.body;
 
-  const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ message: "User not found" });
+    const user = await User.findOne({ username: login });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found"
+      });
+    }
 
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) return res.status(400).json({ message: "Wrong password" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid password"
+      });
+    }
 
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET || "secret123",
-    { expiresIn: "1d" }
-  );
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET || "secret",
+      { expiresIn: "1d" }
+    );
 
-  res.json({ token });
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
 };

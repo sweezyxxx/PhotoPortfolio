@@ -1,34 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+  <meta charset="UTF-8">
   <title>Albums</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="favicon.ico">
 </head>
+
 <body>
 
-<nav>
-  <strong>PhotoPortfolio</strong>
-  <div>
-    <a href="index.html">Gallery</a>
-    <a href="upload.html">Upload</a>
-    <a href="albums.html">Albums</a>
-    <a href="stats.html">Stats</a>
+  <nav>
+    <strong>PhotoPortfolio</strong>
+    <div>
+      <a href="index.html">Gallery</a>
+      <a href="upload.html">Upload</a>
+      <a href="albums.html">Albums</a>
+      <a href="stats.html">Stats</a>
+    </div>
+    <div id="nav-auth"></div>
+  </nav>
+
+  <div class="container">
+
+    <h1>Albums</h1>
+
+    <section>
+      <h2>Create album</h2>
+      <input id="albumName" placeholder="Album name">
+      <input id="albumDescription" placeholder="Description">
+      <button onclick="createAlbum()">Create</button>
+    </section>
+
+    <section>
+      <h2>Your albums</h2>
+      <div id="albums"></div>
+    </section>
+
+    <section>
+      <h2>Add photos to album</h2>
+      <select id="albumSelect"></select>
+      <div id="photos" class="grid"></div>
+    </section>
+
   </div>
-</nav>
 
-<div class="container">
+  <script src="js/api.js"></script>
+  <script>
+    requireAuth();
+    renderNav();
+  </script>
+  <script src="js/albums.js"></script>
 
-  <h1>Create album</h1>
-  <input id="albumName" placeholder="Name">
-  <input id="albumDescription" placeholder="Description">
-  <button onclick="createAlbum()">Create</button>
-
-  <h2>Your albums</h2>
-  <div id="albums"></div>
-
-</div>
-
-<script src="js/api.js"></script>
-<script src="js/albums.js"></script>
 </body>
+
 </html>

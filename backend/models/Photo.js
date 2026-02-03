@@ -12,8 +12,16 @@ const photoSchema = new mongoose.Schema({
 
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 
-  views: { type: Number, default: 0 },
-  likes: { type: Number, default: 0 },
+  views: {
+    type: Number,
+    default: 0
+  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
 }, { timestamps: true });
 
 photoSchema.index({ category: 1 });

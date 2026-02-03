@@ -5,13 +5,18 @@ const {
   createAlbum,
   addPhotoToAlbum,
   removePhotoFromAlbum,
-  getAlbums
+  getAlbums,
+  getSingleAlbum,
+  deleteAlbum
 } = require("../controllers/albumController");
 
 router.post("/", auth, createAlbum);
 router.get("/", auth, getAlbums);
+router.get("/:id", auth, getSingleAlbum);
 
 router.post("/:id/photos", auth, addPhotoToAlbum);
 router.delete("/:id/photos", auth, removePhotoFromAlbum);
+
+router.delete("/:id", auth, deleteAlbum);
 
 module.exports = router;
