@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Albums</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+  <strong>PhotoPortfolio</strong>
+  <div>
+    <a href="index.html">Gallery</a>
+    <a href="upload.html">Upload</a>
+    <a href="albums.html">Albums</a>
+    <a href="stats.html">Stats</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <h1>Create album</h1>
+  <input id="albumName" placeholder="Name">
+  <input id="albumDescription" placeholder="Description">
+  <button onclick="createAlbum()">Create</button>
+
+  <h2>Your albums</h2>
+  <div id="albums"></div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/albums.js"></script>
+</body>
+</html>
