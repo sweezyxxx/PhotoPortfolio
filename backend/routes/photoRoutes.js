@@ -12,14 +12,15 @@ const {
     updatePhoto,
     deletePhoto,
     viewPhoto,
-    toggleLike,
     getPopularPhotos,
     photosByCategory,
     uploadsPerMonth,
-    addView
+    addView,
+    getCategories,
 } = require("../controllers/photoController");
 
 router.get("/", getPhotos);
+router.get("/categories", getCategories);
 
 router.get("/stats/popular", getPopularPhotos);
 router.get("/stats/categories", photosByCategory);
@@ -33,12 +34,12 @@ router.post(
     uploadPhoto
 );
 
-
 router.get("/:id", getSinglePhoto);
 router.put("/:id", auth, updatePhoto);
 router.delete("/:id", auth, deletePhoto);
 
 router.get("/:id/view", viewPhoto);
-router.post("/:id/like", auth, toggleLike);
 router.post("/:id/view", addView);
+
+
 module.exports = router;

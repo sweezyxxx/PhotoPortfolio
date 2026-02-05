@@ -16,12 +16,11 @@ const photoSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  likes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    }
-  ],
+  orientation: {
+    type: String,
+    enum: ["vertical", "horizontal"],
+    required: true
+  }
 }, { timestamps: true });
 
 photoSchema.index({ category: 1 });

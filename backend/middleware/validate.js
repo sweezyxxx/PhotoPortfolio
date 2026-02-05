@@ -5,7 +5,8 @@ exports.validatePhoto = (req, res, next) => {
     title: Joi.string().min(2).required(),
     description: Joi.string().allow(""),
     tags: Joi.string().allow(""),
-    category: Joi.string().required()
+    category: Joi.string().required(),
+    orientation: Joi.string().valid("vertical", "horizontal").required()
   });
 
   const { error } = schema.validate(req.body);

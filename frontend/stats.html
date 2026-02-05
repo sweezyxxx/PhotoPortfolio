@@ -3,48 +3,89 @@
 
 <head>
   <meta charset="UTF-8">
+
   <title>Statistics</title>
+
+  <!-- =======================
+       STYLES & ICON
+  ======================= -->
+
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="favicon.ico">
 </head>
 
 <body>
 
+  <!-- =======================
+       MAIN NAVIGATION
+  ======================= -->
+
   <nav>
     <strong>PhotoPortfolio</strong>
-    <div>
-      <a href="index.html">Gallery</a>
-      <a href="upload.html">Upload</a>
-      <a href="albums.html">Albums</a>
-      <a href="stats.html">Stats</a>
+
+    <div class="nav-links">
+      <a id="nav-gallery" href="index.html">Gallery</a>
+      <a id="nav-upload" href="upload.html">Upload</a>
+      <a id="nav-albums" href="albums.html">Albums</a>
+      <a id="nav-stats" href="stats.html">Stats</a>
     </div>
+
     <div id="nav-auth"></div>
   </nav>
 
+
+  <!-- =======================
+       PAGE CONTENT
+  ======================= -->
+
   <div class="container">
+
     <h1>Statistics</h1>
+
+    <!-- =======================
+         POPULAR PHOTOS
+    ======================= -->
 
     <section>
       <h2>Most viewed photos</h2>
       <div id="popular" class="grid"></div>
     </section>
 
+
+    <!-- =======================
+         CATEGORY STATS
+    ======================= -->
+
     <section>
       <h2>Photos by category</h2>
       <div id="categories"></div>
     </section>
 
+
+    <!-- =======================
+         MONTHLY STATS
+    ======================= -->
+
     <section>
       <h2>Uploads per month</h2>
       <div id="monthly"></div>
     </section>
+
   </div>
 
+
+  <!-- =======================
+       SCRIPTS
+  ======================= -->
+
   <script src="js/api.js"></script>
+  <script src="js/photos.js"></script>
+
   <script>
     requireAuth();
     renderNav();
   </script>
+
   <script src="js/stats.js"></script>
 
 </body>

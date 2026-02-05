@@ -1,35 +1,42 @@
 /* =========================
-   Base & Reset
+   BASE RESET
 ========================= */
 
 * {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: system-ui, Arial, sans-serif;
   background: #f6f7f9;
   color: #222;
+  overflow-x: hidden;
 }
 
+
 /* =========================
-   Layout
+   LAYOUT WRAPPER
 ========================= */
 
 .container {
   max-width: 1400px;
-  margin: auto;
-  padding: 40px 24px;
+  margin: 0 auto;
+  padding: 20px;
 }
-
 
 section {
   margin-bottom: 40px;
 }
 
+
 /* =========================
-   Typography
+   TYPOGRAPHY
 ========================= */
 
 h1,
@@ -42,8 +49,9 @@ h2 {
   margin-bottom: 30px;
 }
 
+
 /* =========================
-   Forms
+   FORM ELEMENTS
 ========================= */
 
 input,
@@ -81,8 +89,24 @@ button:disabled {
   cursor: not-allowed;
 }
 
+
 /* =========================
-   Grid & Cards
+   AUTH BUTTON LINKS
+========================= */
+
+#nav-auth a {
+  padding: 10px 18px;
+  border-radius: 6px;
+  background: #222;
+  color: #fff;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* =========================
+   GRID SYSTEM
 ========================= */
 
 .grid {
@@ -90,8 +114,14 @@ button:disabled {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   grid-auto-flow: dense;
+  max-width: 100%;
+  overflow: hidden;
 }
 
+
+/* =========================
+   PHOTO CARDS
+========================= */
 
 .card {
   background: #fff;
@@ -103,17 +133,9 @@ button:disabled {
 .card img {
   width: 100%;
   height: 338px;
-  /* ВАЖНО */
+  display: block;
+  object-fit: cover;
   border-radius: 8px;
-  margin-bottom: 8px;
-}
-
-.card.horizontal {
-  grid-column: span 2;
-}
-
-
-.card img {
   transition: transform 0.3s ease;
 }
 
@@ -121,8 +143,44 @@ button:disabled {
   transform: scale(1.03);
 }
 
+.card h3,
+.card h4 {
+  margin-block: 8px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.views {
+  font-size: 13px;
+  color: #666;
+}
+
+
 /* =========================
-   Stats (используются в stats.html)
+   CARD ORIENTATION (MERGED)
+========================= */
+.card.horizontal {
+  grid-column: span 2;
+}
+
+.card.horizontal img {
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.card.vertical img {
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
+
+
+/* =========================
+   STATISTICS BLOCKS
 ========================= */
 
 .stat-box {
@@ -146,8 +204,9 @@ button:disabled {
   margin-bottom: 10px;
 }
 
+
 /* =========================
-   Upload Page
+   UPLOAD PAGE
 ========================= */
 
 .upload-container {
@@ -185,8 +244,9 @@ button:disabled {
   opacity: 0.9;
 }
 
+
 /* =========================
-   Base Navigation
+   BASE NAVIGATION
 ========================= */
 
 nav {
@@ -195,12 +255,10 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Links inside nav */
-nav a {
+.nav-links a {
   margin-left: 16px;
   text-decoration: none;
   color: #333;
@@ -208,12 +266,13 @@ nav a {
   font-size: 15px;
 }
 
-nav a:hover {
+.nav-links a:hover {
   color: #000;
 }
 
+
 /* =========================
-   Enhanced Navbar (modern)
+   MODERN NAVBAR
 ========================= */
 
 .navbar {
@@ -222,25 +281,16 @@ nav a:hover {
   border-bottom: 1px solid #eee;
 }
 
-/* Logo / title */
 .nav-left {
   font-size: 22px;
   font-weight: 700;
-  letter-spacing: 0.3px;
 }
 
-/* Center links */
 .nav-center {
   display: flex;
   gap: 28px;
 }
 
-.nav-center a {
-  margin-left: 0;
-  /* перекрываем nav a */
-}
-
-/* User info */
 .nav-right {
   display: flex;
   align-items: center;
@@ -274,14 +324,14 @@ nav a:hover {
   gap: 12px;
 }
 
-/* ===== Fullscreen photo modal ===== */
+
+/* =========================
+   FULLSCREEN MODAL
+========================= */
 
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   background: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
@@ -306,4 +356,73 @@ nav a:hover {
 
 .hidden {
   display: none;
+}
+
+
+/* =========================
+   ALBUM GRID
+========================= */
+
+#albums .grid {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+#albums .card {
+  padding-inline: 10px;
+  margin-bottom: 10px;
+}
+
+#albums .card p,
+#albums .card div {
+  padding-inline: 10px;
+  margin-block: 8px;
+}
+
+#albums .card img {
+  width: 100%;
+  display: block;
+  border-radius: 6px;
+}
+
+.album-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.album-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.album-content {
+  margin-top: 12px;
+}
+
+/* =========================
+   DANGER BUTTON
+========================= */
+
+.danger-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.danger-btn:hover {
+  opacity: 0.9;
+}
+
+
+/* =========================
+   GRID OVERRIDES
+========================= */
+
+#photos.grid .card.horizontal {
+  grid-column: span 2;
 }

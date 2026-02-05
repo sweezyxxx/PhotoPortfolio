@@ -1,72 +1,74 @@
 /* =======================
-   LOAD STATS
+   STATS LOADER
 ======================= */
+
 async function loadStats() {
   await loadPopular();
   await loadCategories();
   await loadMonthly();
 }
 
+
 /* =======================
    POPULAR PHOTOS
 ======================= */
+
 async function loadPopular() {
   const res = await apiRequest("/photos/stats/popular");
   const photos = res.data || [];
 
-  const container = document.getElementById("popular");
-  container.innerHTML = "";
-
-  photos.forEach(p => {
-    container.innerHTML += `
-      <div class="card">
-        <img src="${p.imageUrl}">
-        <h4>${p.title}</h4>
-        <p>👁 ${p.views} views</p>
-      </div>
-    `;
-  });
+  renderGallery("popular", photos);
 }
+
 
 /* =======================
    PHOTOS BY CATEGORY
 ======================= */
+
 async function loadCategories() {
   const res = await apiRequest("/photos/stats/categories");
   const stats = res.data || [];
 
   const container = document.getElementById("categories");
+  if (!container) return;
+
   container.innerHTML = "";
 
-  stats.forEach(s => {
+  stats.forEach(stat => {
     container.innerHTML += `
       <div class="card">
-        <strong>${s._id}</strong>: ${s.total} photos
+        <strong>${stat._id}</strong>: ${stat.total} photos
       </div>
     `;
   });
 }
 
+
 /* =======================
    UPLOADS PER MONTH
 ======================= */
+
 async function loadMonthly() {
   const res = await apiRequest("/photos/stats/monthly");
   const stats = res.data || [];
 
   const container = document.getElementById("monthly");
+  if (!container) return;
+
   container.innerHTML = "";
 
-  stats.forEach(s => {
+  stats.forEach(stat => {
     container.innerHTML += `
       <div class="card">
-        Month ${s._id}: ${s.total} uploads
+        Month ${stat._id}: ${stat.total} uploads
       </div>
     `;
   });
 }
 
+
 /* =======================
    INIT
 ======================= */
+
 loadStats();

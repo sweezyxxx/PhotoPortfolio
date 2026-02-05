@@ -1,12 +1,15 @@
 /* =======================
-   STATE
+   GLOBAL STATE
 ======================= */
+
 let allPhotos = [];
 let allAlbums = [];
 
+
 /* =======================
-   LOAD ALBUMS
+   LOAD ALL ALBUMS
 ======================= */
+
 async function loadAlbums() {
   const res = await apiRequest("/albums");
   allAlbums = res.data || res;
@@ -14,67 +17,115 @@ async function loadAlbums() {
   const albumsDiv = document.getElementById("albums");
   const select = document.getElementById("albumSelect");
 
+  const selectedAlbumId = select ? select.value : null;
+
+  if (!albumsDiv) return;
+
   albumsDiv.innerHTML = "";
-  select.innerHTML = `<option value="">Select album</option>`;
+
+  if (select) {
+    select.innerHTML = `<option value="">Select album</option>`;
+  }
 
   allAlbums.forEach(album => {
-    // селект
-    select.innerHTML += `<option value="${album._id}">${album.name}</option>`;
 
-    // карточка альбома
+    /* ===== Album selector option ===== */
+
+    if (select) {
+      select.innerHTML += `
+        <option 
+          value="${album._id}"
+          ${album._id === selectedAlbumId ? "selected" : ""}
+        >
+          ${album.name}
+        </option>
+      `;
+    }
+
+    /* ===== Ownership check ===== */
+
+    const user = getUser();
+    const isOwner = user && album.owner._id === user.id;
+
+    /* ===== Album card ===== */
+
     albumsDiv.innerHTML += `
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3>${album.name}</h3>
-      <button onclick="deleteAlbum('${album._id}')">Delete album</button>
-    </div>
+      <div class="card album-card">
 
-    <p>${album.description || ""}</p>
+        <div class="album-header">
+          <h3>${album.name}</h3>
 
-    <div class="grid">
-      ${album.photos.map(photo => `
-        <div>
-          <img src="${photo.imageUrl}">
-          <button onclick="removeFromAlbum('${album._id}', '${photo._id}')">
-            Remove
-          </button>
+          <div class="album-actions">
+            <button onclick="toggleAlbum('${album._id}')">Hide</button>
+
+            ${isOwner
+        ? `<button onclick="deleteAlbum('${album._id}')">Delete</button>`
+        : ""
+      }
+          </div>
         </div>
-      `).join("")}
-    </div>
-  </div>
-`;
+
+        <p>${album.description || ""}</p>
+
+        <div 
+          id="album-${album._id}" 
+          class="grid album-content"
+        ></div>
+
+      </div>
+    `;
+
+    renderAlbumGallery(
+      `album-${album._id}`,
+      album.photos,
+      album._id
+    );
   });
 }
+
 
 /* =======================
    LOAD ALL PHOTOS
 ======================= */
+
 async function loadPhotos() {
   const res = await apiRequest("/photos");
   allPhotos = res.data || res;
 
-  renderPhotosForAdding();
+  renderAddToAlbum();
 }
 
-/* =======================
-   RENDER PHOTOS WITH LOGIC
-======================= */
-function renderPhotosForAdding() {
-  const photosDiv = document.getElementById("photos");
-  const selectedAlbumId = document.getElementById("albumSelect").value;
 
-  photosDiv.innerHTML = "";
+/* =======================
+   RENDER ADD TO ALBUM GRID
+======================= */
+
+function renderAddToAlbum() {
+  const container = document.getElementById("photos");
+  const select = document.getElementById("albumSelect");
+
+  if (!container) return;
+
+  const albumId = select ? select.value : null;
+
+  container.innerHTML = "";
 
   allPhotos.forEach(photo => {
-    const alreadyInAlbum = selectedAlbumId &&
-      allAlbums.find(a => a._id === selectedAlbumId)
-        ?.photos.some(p => p._id === photo._id);
 
-    photosDiv.innerHTML += `
-      <div class="card">
+    const album = albumId
+      ? allAlbums.find(a => a._id === albumId)
+      : null;
+
+    const alreadyInAlbum = album
+      ? album.photos.some(p => p._id === photo._id)
+      : false;
+
+    container.innerHTML += `
+      <div class="card ${photo.orientation}">
         <img src="${photo.imageUrl}">
         <h4>${photo.title}</h4>
-        <button 
+
+        <button
           onclick="addToAlbum('${photo._id}')"
           ${alreadyInAlbum ? "disabled" : ""}
         >
@@ -85,9 +136,11 @@ function renderPhotosForAdding() {
   });
 }
 
+
 /* =======================
-   CREATE ALBUM
+   CREATE NEW ALBUM
 ======================= */
+
 async function createAlbum() {
   const name = albumName.value;
   const description = albumDescription.value;
@@ -100,48 +153,80 @@ async function createAlbum() {
   albumDescription.value = "";
 
   await loadAlbums();
-  renderPhotosForAdding();
+  renderAddToAlbum();
 }
+
 
 /* =======================
    ADD PHOTO TO ALBUM
 ======================= */
+
 async function addToAlbum(photoId) {
   const albumId = albumSelect.value;
+
   if (!albumId) return alert("Select album first");
 
-  const res = await apiRequest(`/albums/${albumId}/photos`, "POST", {
-    photoId
-  });
+  const res = await apiRequest(
+    `/albums/${albumId}/photos`,
+    "POST",
+    { photoId }
+  );
 
   if (!res.success) {
     alert(res.message || "Failed");
     return;
   }
 
+  /* ===== Refresh state ===== */
+
   await loadAlbums();
-  renderPhotosForAdding();
+  renderAddToAlbum();
 }
+
 
 /* =======================
    REMOVE PHOTO FROM ALBUM
 ======================= */
-async function removeFromAlbum(albumId, photoId) {
-  await apiRequest(`/albums/${albumId}/photos`, "DELETE", {
-    photoId
-  });
 
-  await loadAlbums();
-  renderPhotosForAdding();
+async function removeFromAlbum(albumId, photoId) {
+  const res = await apiRequest(
+    `/albums/${albumId}/photos`,
+    "DELETE",
+    { photoId }
+  );
+
+  if (!res.success) return;
+
+  /* ===== Update local state ===== */
+
+  const album = allAlbums.find(a => a._id === albumId);
+
+  if (album) {
+    album.photos = album.photos.filter(
+      p => p._id !== photoId
+    );
+  }
+
+  /* ===== Remove only DOM element ===== */
+
+  const card = document.getElementById(`album-photo-${photoId}`);
+  if (card) card.remove();
+
+  renderAddToAlbum();
 }
+
 
 /* =======================
    DELETE ALBUM
 ======================= */
+
 async function deleteAlbum(albumId) {
   if (!confirm("Delete this album?")) return;
 
-  const res = await apiRequest(`/albums/${albumId}`, "DELETE");
+  const res = await apiRequest(
+    `/albums/${albumId}`,
+    "DELETE"
+  );
 
   if (!res.success) {
     alert(res.message || "Failed to delete album");
@@ -149,17 +234,88 @@ async function deleteAlbum(albumId) {
   }
 
   await loadAlbums();
-  renderPhotosForAdding();
+  renderAddToAlbum();
 }
+
+
+/* =======================
+   ALBUM GALLERY RENDER
+======================= */
+
+function renderAlbumGallery(containerId, photos, albumId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = photos.map(photo => `
+    <div 
+      class="card ${photo.orientation}" 
+      id="album-photo-${photo._id}"
+    >
+
+      <img
+        src="${photo.imageUrl}"
+        onclick="openPhoto('${photo._id}', '${photo.imageUrl}')"
+        loading="lazy"
+        style="cursor:pointer"
+      >
+
+      <h4>${photo.title || ""}</h4>
+
+      ${getUser() && photo.owner === getUser().id
+      ? `
+            <button
+              class="danger-btn"
+              onclick="removeFromAlbum('${albumId}', '${photo._id}')"
+            >
+              Remove
+            </button>
+          `
+      : ""
+    }
+
+    </div>
+  `).join("");
+}
+
+
+/* =======================
+   TOGGLE ALBUM VISIBILITY
+======================= */
+
+function toggleAlbum(albumId) {
+  const container = document.getElementById(`album-${albumId}`);
+  if (!container) return;
+
+  const btn = event.target;
+
+  const isHidden = container.style.display === "none";
+
+  container.style.display = isHidden ? "grid" : "none";
+  btn.textContent = isHidden ? "Hide" : "Show";
+}
+
 
 /* =======================
    EVENTS
 ======================= */
-document.getElementById("albumSelect")
-  .addEventListener("change", renderPhotosForAdding);
+
+const select = document.getElementById("albumSelect");
+
+if (select) {
+  select.addEventListener("change", renderAddToAlbum);
+}
+
 
 /* =======================
    INIT
 ======================= */
+
 loadAlbums();
 loadPhotos();
+
+const user = getUser();
+
+if (!user) {
+  document.getElementById("album-create")?.remove();
+  document.getElementById("add-to-album")?.remove();
+}

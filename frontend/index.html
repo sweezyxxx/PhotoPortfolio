@@ -3,39 +3,75 @@
 
 <head>
   <meta charset="UTF-8">
+
   <title>Gallery</title>
+
+  <!-- =======================
+       STYLES & ICON
+  ======================= -->
+
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="/favicon.ico">
 </head>
 
 <body>
 
+  <!-- =======================
+       MAIN NAVIGATION
+  ======================= -->
+
   <nav>
     <strong>PhotoPortfolio</strong>
-    <div>
-      <a href="index.html">Gallery</a>
-      <a href="upload.html">Upload</a>
-      <a href="albums.html">Albums</a>
-      <a href="stats.html">Stats</a>
+
+    <div class="nav-links">
+      <a id="nav-gallery" href="index.html">Gallery</a>
+      <a id="nav-upload" href="upload.html">Upload</a>
+      <a id="nav-albums" href="albums.html">Albums</a>
+      <a id="nav-stats" href="stats.html">Stats</a>
     </div>
+
     <div id="nav-auth"></div>
   </nav>
 
+
+  <!-- =======================
+       PAGE CONTENT
+  ======================= -->
+
   <div class="container">
+
     <h1>Gallery</h1>
+
     <div id="gallery" class="grid"></div>
+
   </div>
 
+
+  <!-- =======================
+       SCRIPTS
+  ======================= -->
+
   <script src="js/api.js"></script>
+
   <script>
     renderNav();
   </script>
+
   <script src="js/photos.js"></script>
 
+
+  <!-- =======================
+       PHOTO MODAL
+  ======================= -->
+
   <div id="photo-modal" class="modal hidden">
-    <span class="close" onclick="closeModal()">×</span>
+    <span class="close" onclick="closeModal()">
+      ×
+    </span>
+
     <img id="modal-img">
   </div>
+
 </body>
 
 </html>

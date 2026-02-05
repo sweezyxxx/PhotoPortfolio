@@ -1,4 +1,13 @@
+/* =======================
+   API CONFIG
+======================= */
+
 const API_URL = "http://localhost:5000/api";
+
+
+/* =======================
+   AUTH TOKEN HELPERS
+======================= */
 
 function getToken() {
   return localStorage.getItem("token");
@@ -8,33 +17,56 @@ function isLoggedIn() {
   return !!getToken();
 }
 
+
+/* =======================
+   USER SESSION ACTIONS
+======================= */
+
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  window.location.href = "login.html";
+
+  window.location.href = "index.html";
 }
 
-async function apiRequest(endpoint, method = "GET", body = null, isForm = false) {
-  const token = getToken();
+
+/* =======================
+   CORE API REQUEST
+======================= */
+
+function apiRequest(
+  endpoint,
+  method = "GET",
+  body = null,
+  isForm = false
+) {
+  const token = localStorage.getItem("token");
+
   const headers = {};
 
   if (token) {
-    headers["Authorization"] = "Bearer " + token;
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
-  // ВАЖНО: Content-Type НЕ ставим для FormData
   if (!isForm) {
     headers["Content-Type"] = "application/json";
   }
 
-  const res = await fetch(API_URL + endpoint, {
+  return fetch(API_URL + endpoint, {
     method,
     headers,
-    body: body ? (isForm ? body : JSON.stringify(body)) : null
-  });
-
-  return res.json();
+    body: isForm
+      ? body
+      : body
+        ? JSON.stringify(body)
+        : null,
+  }).then(res => res.json());
 }
+
+
+/* =======================
+   AUTH GUARDS
+======================= */
 
 function requireAuth() {
   if (!isLoggedIn()) {
@@ -42,25 +74,49 @@ function requireAuth() {
   }
 }
 
+
+/* =======================
+   NAVBAR RENDERING
+======================= */
+
 function renderNav() {
   const navAuth = document.getElementById("nav-auth");
   if (!navAuth) return;
 
   const user = getUser();
 
+  /* ===== Remove protected links ===== */
+
+  if (!user) {
+    document.getElementById("nav-upload")?.remove();
+    document.getElementById("nav-stats")?.remove();
+  }
+
+  /* ===== Auth state UI ===== */
+
   if (user) {
     navAuth.innerHTML = `
-      <span>Hello, <strong>${user.username}</strong></span>
+      <span>
+        Hello, <strong>${user.username}</strong>
+      </span>
       <button onclick="logout()">Logout</button>
     `;
   } else {
-    navAuth.innerHTML = `<a href="login.html">Login</a>`;
+    navAuth.innerHTML = `
+      <a href="login.html">Login</a>
+    `;
   }
 }
 
 
+/* =======================
+   USER DATA ACCESS
+======================= */
+
 function getUser() {
   const user = localStorage.getItem("user");
-  return user ? JSON.parse(user) : null;
-}
 
+  return user
+    ? JSON.parse(user)
+    : null;
+}
