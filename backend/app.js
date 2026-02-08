@@ -4,15 +4,17 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
+const path = require("path");
 
 const app = express();
 
 const connectDB = require("./config/db");
 connectDB();
 
+// Allow all origins for Replit deployment
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: true,
         credentials: true,
     })
 );
@@ -28,6 +30,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/photos", photoRoutes);
 app.use("/api/albums", albumRoutes);
 app.use("/api/users", userRoutes);
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+// Serve index.html for all non-API routes
+app.get("*", (req, res) => {
+    if (!req.path.startsWith("/api")) {
+        res.sendFile(path.join(__dirname, "../frontend", "index.html"));
+    }
+});
 
 // Multer-specific error handling
 app.use((err, req, res, next) => {

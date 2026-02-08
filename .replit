@@ -1,15 +1,17 @@
-run = "cd backend && node app.js"
+run = "cd backend && npm install --legacy-peer-deps && node app.js"
 entrypoint = "backend/app.js"
-
-modules = ["nodejs-18"]
 
 [nix]
 channel = "stable-22_11"
 
+[deployment]
+run = [
+  "sh",
+  "-c",
+  "cd backend && npm install --legacy-peer-deps && node app.js",
+]
+deploymentTarget = "cloudrun"
+
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[deployment]
-run = ["sh", "-c", "cd backend && npm install && node app.js"]
-deploymentTarget = "cloudrun"
