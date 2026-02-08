@@ -39,10 +39,10 @@ function renderGallery(containerId, photos) {
                 <button class="btn-edit" onclick="editPhoto('${photo._id}')">Edit</button>
                 <button class="btn-delete" onclick="deletePhoto('${photo._id}')">Delete</button>
               </div>
+              <span class="views">👁 ${photo.views || 0}</span>
             `
         : ""
       }
-          <span class="views">👁 ${photo.views || 0}</span>
         </div>
       </div>
     `;
