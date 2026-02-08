@@ -1,3 +1,15 @@
+function showError(message) {
+  const errorDiv = document.getElementById('errorMessage');
+  if (errorDiv) {
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+
+    setTimeout(() => {
+      errorDiv.style.display = 'none';
+    }, 5000);
+  }
+}
+
 async function login() {
   const res = await apiRequest("/auth/login", "POST", {
     login: loginInput.value,
@@ -5,7 +17,7 @@ async function login() {
   });
 
   if (!res.success) {
-    alert("Login failed");
+    showError(res.message || "Login failed");
     return;
   }
 
@@ -24,7 +36,7 @@ async function register() {
   });
 
   if (!res.success) {
-    alert("Register failed");
+    showError(res.message || "Register failed");
     return;
   }
 

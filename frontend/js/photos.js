@@ -20,6 +20,7 @@ function renderGallery(containerId, photos) {
 
   photos.forEach(photo => {
     const orientation = photo.orientation || "vertical";
+    const isOwner = user && photo.owner === user.id;
 
     container.innerHTML += `
       <div class="card ${orientation}">
@@ -31,18 +32,23 @@ function renderGallery(containerId, photos) {
 
         <h3>${photo.title || ""}</h3>
 
-        ${user
+        <div class="photo-actions">
+          ${isOwner
         ? `
-              <div class="photo-actions">
-                <span class="views">👁 ${photo.views}</span>
+              <div class="action-buttons">
+                <button class="btn-edit" onclick="editPhoto('${photo._id}')">✏️ Edit</button>
+                <button class="btn-delete" onclick="deletePhoto('${photo._id}')">🗑️ Delete</button>
               </div>
             `
         : ""
       }
+          <span class="views">👁 ${photo.views || 0}</span>
+        </div>
       </div>
     `;
   });
 }
+
 
 
 /* =======================
@@ -87,20 +93,32 @@ async function viewPhoto(id) {
 
 
 /* =======================
-   UPDATE PHOTO
+   EDIT PHOTO
 ======================= */
 
-async function updatePhoto(id) {
+async function editPhoto(id) {
+  const newTitle = prompt("Enter new title:");
+  if (!newTitle) return;
+
+  const newDescription = prompt("Enter new description (optional):");
+  const newCategory = prompt("Enter new category (optional):");
+
   const data = {
-    title: title.value,
-    description: description.value,
-    category: category.value,
-    tags: tags.value,
+    title: newTitle
   };
 
-  await apiRequest(`/photos/${id}`, "PUT", data);
-  alert("Updated");
+  if (newDescription) data.description = newDescription;
+  if (newCategory) data.category = newCategory;
+
+  try {
+    await apiRequest(`/photos/${id}`, "PUT", data);
+    alert("Photo updated successfully!");
+    loadPhotos(true);
+  } catch (err) {
+    alert("Error updating photo: " + err.message);
+  }
 }
+
 
 
 /* =======================
@@ -108,14 +126,19 @@ async function updatePhoto(id) {
 ======================= */
 
 async function deletePhoto(id) {
-  if (!confirm("Delete photo?")) return;
+  if (!confirm("Are you sure you want to delete this photo? This action cannot be undone.")) {
+    return;
+  }
 
-  await apiRequest(`/photos/${id}`, "DELETE");
-
-  alert("Deleted");
-
-  loadPhotos();
+  try {
+    await apiRequest(`/photos/${id}`, "DELETE");
+    alert("Photo deleted successfully!");
+    loadPhotos(true);
+  } catch (err) {
+    alert("Error deleting photo: " + err.message);
+  }
 }
+
 
 
 /* =======================

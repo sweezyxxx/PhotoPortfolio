@@ -99,6 +99,7 @@ function renderNav() {
       <span>
         Hello, <strong>${user.username}</strong>
       </span>
+      <a href="profile.html">Profile</a>
       <button onclick="logout()">Logout</button>
     `;
   } else {
@@ -107,6 +108,7 @@ function renderNav() {
     `;
   }
 }
+
 
 
 /* =======================

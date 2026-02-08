@@ -29,6 +29,7 @@ app.use("/api/photos", photoRoutes);
 app.use("/api/albums", albumRoutes);
 app.use("/api/users", userRoutes);
 
+// Multer-specific error handling
 app.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         return res.status(400).json({
@@ -36,17 +37,15 @@ app.use((err, req, res, next) => {
             message: err.message,
         });
     }
-
-    if (err) {
-        return res.status(500).json({
-            success: false,
-            message: err.message,
-        });
-    }
-
-    next();
+    next(err);
 });
 
-app.listen(5000, () => {
-    console.log("Server running");
+// Global error handler
+const errorHandler = require("./middleware/errorHandler");
+app.use(errorHandler);
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
