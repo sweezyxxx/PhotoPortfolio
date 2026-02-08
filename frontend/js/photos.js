@@ -36,8 +36,8 @@ function renderGallery(containerId, photos) {
           ${isOwner
         ? `
               <div class="action-buttons">
-                <button class="btn-edit" onclick="editPhoto('${photo._id}')">✏️ Edit</button>
-                <button class="btn-delete" onclick="deletePhoto('${photo._id}')">🗑️ Delete</button>
+                <button class="btn-edit" onclick="editPhoto('${photo._id}')">Edit</button>
+                <button class="btn-delete" onclick="deletePhoto('${photo._id}')">Delete</button>
               </div>
             `
         : ""
