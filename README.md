@@ -2,7 +2,7 @@
 
 A modern photo portfolio platform for uploading, managing, and sharing photographs with authentication, cloud storage, and comprehensive user management.
 
-**Live Demo:** [https://photo-portfolio--temirlan1536.replit.app](https://photo-portfolio--temirlan1536.replit.app)
+**Live Demo:** [https://danial-portfolio--sweezy15362.replit.app](https://danial-portfolio--sweezy15362.replit.app)
 
 ---
 
@@ -172,7 +172,7 @@ PhotoPortfolio/
 ## 📡 API Documentation
 
 ### Base URL
-- **Production:** `https://photo-portfolio--temirlan1536.replit.app/api`
+- **Production:** `https://danial-portfolio--sweezy15362.replit.app`
 - **Local:** `http://localhost:5000/api`
 
 ---
@@ -598,7 +598,7 @@ if (photo.owner.toString() !== req.user.id) {
 ## 🌐 Deployment
 
 ### Platform: Replit
-**Live URL:** [https://photo-portfolio--temirlan1536.replit.app](https://photo-portfolio--temirlan1536.replit.app)
+**Live URL:** [https://danial-portfolio--sweezy15362.replit.app](https://danial-portfolio--sweezy15362.replit.app)
 
 ### Environment Variables (Replit Secrets)
 ```
@@ -627,7 +627,7 @@ NODE_ENV=production
 
 ### Test User Registration
 ```bash
-curl -X POST https://photo-portfolio--temirlan1536.replit.app/api/auth/register \
+curl -X POST https://danial-portfolio--sweezy15362.replit.app/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "testuser",
@@ -638,7 +638,7 @@ curl -X POST https://photo-portfolio--temirlan1536.replit.app/api/auth/register 
 
 ### Test Login
 ```bash
-curl -X POST https://photo-portfolio--temirlan1536.replit.app/api/auth/login \
+curl -X POST https://danial-portfolio--sweezy15362.replit.app/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "login": "test@example.com",
@@ -648,7 +648,7 @@ curl -X POST https://photo-portfolio--temirlan1536.replit.app/api/auth/login \
 
 ### Test Get Photos
 ```bash
-curl https://photo-portfolio--temirlan1536.replit.app/api/photos
+curl https://danial-portfolio--sweezy15362.replit.app/api/photos
 ```
 
 ---
@@ -759,7 +759,7 @@ npx serve .  # Serves on http://localhost:3000
 
 **Author:** Temirlan
 **GitHub:** [sweezyxxx/PhotoPortfolio](https://github.com/sweezyxxx/PhotoPortfolio)
-**Live Demo:** [https://photo-portfolio--temirlan1536.replit.app](https://photo-portfolio--temirlan1536.replit.app)
+**Live Demo:** [https://danial-portfolio--sweezy15362.replit.app](https://danial-portfolio--sweezy15362.replit.app/)
 
 ---
 

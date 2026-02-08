@@ -1,17 +1,41 @@
 run = "cd backend && npm install --legacy-peer-deps && node app.js"
 entrypoint = "backend/app.js"
+modules = ["nodejs-20"]
 
 [nix]
 channel = "stable-22_11"
 
 [deployment]
-run = [
-  "sh",
-  "-c",
-  "cd backend && npm install --legacy-peer-deps && node app.js",
-]
-deploymentTarget = "cloudrun"
+run = ["node", "backend/app.js"]
+deploymentTarget = "autoscale"
 
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[agent]
+expertMode = true
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Run App"
+
+[[workflows.workflow]]
+name = "Run App"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node backend/app.js"
+waitForPort = 5000
