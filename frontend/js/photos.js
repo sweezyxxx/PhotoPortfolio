@@ -41,7 +41,9 @@ function renderGallery(containerId, photos) {
               </div>
               <span class="views">👁 ${photo.views || 0}</span>
             `
-        : ""
+        : user
+          ? `<span class="views">👁 ${photo.views || 0}</span>`
+          : ""
       }
         </div>
       </div>
